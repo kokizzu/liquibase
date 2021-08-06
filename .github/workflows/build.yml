@@ -78,7 +78,7 @@ jobs:
       - name: Start Docker Databases
         run: docker-compose -f ./liquibase-integration-tests/docker/docker-compose.yml up -d
       - name: Run Tests
-        run: mvn -B surefile:test failsafe:test
+        run: mvn -B surefire:test
       - name: Stop Docker Databases
         run: docker-compose -f ./liquibase-integration-tests/docker/docker-compose.yml down
       - name: Archive Test Results
@@ -88,4 +88,3 @@ jobs:
           name: test-reports-integration
           path: |
               ./**/target/surefire-reports
-              ./**/target/failsafe-reports
