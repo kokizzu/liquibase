@@ -27,29 +27,21 @@ jobs:
       with:
         java-version: ${{ matrix.java }}
         distribution: 'adopt'
-    - name: Test and Package
-      run: mvn -B -Dliquibase.version.qualifier=${{ github.head_ref }} -Dbuild.number=${{ github.run_number }} -Dbuild.commit=${{ github.sha }} test package
+    - name: Build, Test, and Package
+      run: mvn -B -Dliquibase.version.qualifier=${{ github.head_ref }} -Dbuild.number=${{ github.run_number }} -Dbuild.commit=${{ github.sha }} clean test package
     - name: Archive Test Results
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
         name: liquibase-test-results-jdk${{ matrix.java }}
         path: ./**/target/surefire-reports
-    - name: Archive liquibase.zip
+    - name: Archive artifacts
       if: ${{ matrix.java == 8}}
       uses: actions/upload-artifact@v2
       with:
         name: artifacts
-        path: liquibase-dist/target/liquibase-*.SNAPSHOT.zip
-    - name: Archive liquibase-maven-plugin.zip
-      if: ${{ matrix.java == 8}}
-      uses: actions/upload-artifact@v2
-      with:
-        name: artifacts
-        path: liquibase-maven-plugin/target/liquibase-*.SNAPSHOT.jar
-    - name: Archive liquibase-maven-plugin.zip
-      if: ${{ matrix.java == 8}}
-      uses: actions/upload-artifact@v2
-      with:
-        name: artifacts
-        path: liquibase-cdi/target/liquibase-*.SNAPSHOT.jar
+        path: |
+          liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.tar.gz
+          liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
+          liquibase-maven-plugin/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
+          liquibase-cdi/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
