@@ -6,7 +6,7 @@ name: Build and Test
 on: [ pull_request]
 
 jobs:
-  test:
+  build:
     name: Java ${{ matrix.java }}
     runs-on: ubuntu-latest
     strategy:
@@ -39,9 +39,53 @@ jobs:
       if: ${{ matrix.java == 8}}
       uses: actions/upload-artifact@v2
       with:
-        name: artifacts
+        name: liquibase-artifacts-${{ github.head_ref }}
         path: |
           liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.tar.gz
           liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
           liquibase-maven-plugin/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
           liquibase-cdi/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
+
+
+  integration-test:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache Local Maven Repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: liquibase-artifacts-${{ github.head_ref }}
+
+      - name: Login to Artifactory
+        uses: docker/login-action@v1
+        with:
+          registry: docker-dev.artifactory.datical.net
+          username: ${{ secrets.RT_USER }}
+          password: ${{ secrets.RT_TOKEN }}
+      - name: Start Docker Databases
+        run: docker-compose -f ./liquibase-integration-tests/docker/docker-compose.yml up -d
+      - name: Run Tests
+        run: mvn -B surefile:test failsafe:test
+      - name: Stop Docker Databases
+        run: docker-compose -f ./liquibase-integration-tests/docker/docker-compose.yml down
+      - name: Archive Test Results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports-integration
+          path: |
+              ./**/target/surefire-reports
+              ./**/target/failsafe-reports
