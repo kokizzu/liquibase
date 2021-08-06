@@ -53,7 +53,7 @@ jobs:
       with:
         name: liquibase-build-${{ github.head_ref }}
         path: |
-          **/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
+          **/target/*-0-${{ github.head_ref }}-SNAPSHOT.jar
           **/target/test-classes
 
   integration-test:
