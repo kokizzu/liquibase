@@ -42,9 +42,8 @@ jobs:
         name: liquibase-artifacts-${{ github.head_ref }}
         path: |
           liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.tar.gz
-          liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
-          liquibase-maven-plugin/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
-          liquibase-cdi/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
+          **/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
+          target/liquibase-0-${{ github.head_ref }}-SNAPSHOT-javadoc.jar
 
 
   integration-test:
