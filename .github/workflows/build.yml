@@ -87,7 +87,7 @@ jobs:
       - name: Start Docker Databases
         run: docker-compose -f ./liquibase-integration-tests/docker/docker-compose.yml up -d
       - name: Run Tests
-        run: mvn -B -Dliquibase.version.qualifier=${{ github.head_ref }} jar:jar install:install surefire:test
+        run: mvn -B -Dliquibase.version.qualifier=${{ github.head_ref }} jar:jar jar:test-jar surefire:test
       - name: Stop Docker Databases
         run: docker-compose -f ./liquibase-integration-tests/docker/docker-compose.yml down
       - name: Archive Test Results
