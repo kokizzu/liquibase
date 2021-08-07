@@ -53,12 +53,6 @@ jobs:
           liquibase-maven-plugin/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
           liquibase-cdi/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
           target/liquibase-0-${{ github.head_ref }}-SNAPSHOT-javadoc
-    - name: Archive build
-      if: ${{ matrix.java == 8}}
-      uses: actions/upload-artifact@v2
-      with:
-        name: liquibase-build-${{ github.head_ref }}
-        path: |
 
   integration-test:
     name: Integration Tests
