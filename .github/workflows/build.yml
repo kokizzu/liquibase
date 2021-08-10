@@ -46,7 +46,7 @@ jobs:
       if: ${{ matrix.java == 8}}
       uses: actions/upload-artifact@v2
       with:
-        name: liquibase-artifacts-${{ github.head_ref }}
+        name: liquibase-artifacts
         path: |
           liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.tar.gz
           liquibase-dist/target/liquibase-0-${{ github.head_ref }}-SNAPSHOT.jar
@@ -94,6 +94,6 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v2
         with:
-          name: test-reports-integration
+          name: liquibase-test-reports-integration
           path: |
               ./**/target/surefire-reports
