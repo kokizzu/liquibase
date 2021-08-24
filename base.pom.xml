@@ -7,7 +7,7 @@
 
     <groupId>org.liquibase</groupId>
     <artifactId>liquibase-base</artifactId>
-    <version>${liquibase.version}</version>
+    <version>0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>${project.artifactId}</name>
@@ -50,8 +50,6 @@
     </scm>
 
     <properties>
-        <liquibase.version.qualifier>local</liquibase.version.qualifier>
-        <liquibase.version>0-${liquibase.version.qualifier}-SNAPSHOT</liquibase.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.enforcer.requireMavenVersion>3.6</maven.enforcer.requireMavenVersion>
@@ -315,18 +313,6 @@
                 <configuration>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                 </configuration>
-            </plugin>
-
-            <!-- By default, no sub-module will be deployed to maven. Override this setting in sub-modules that should be -->
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>default-install</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-
             </plugin>
 
             <plugin>
