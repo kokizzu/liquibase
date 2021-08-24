@@ -52,8 +52,9 @@ jobs:
         path: |
           liquibase-dist/target/liquibase-0-SNAPSHOT.tar.gz
           liquibase-dist/target/liquibase-0-SNAPSHOT.jar
-          liquibase-maven-plugin/target/liquibase-0-SNAPSHOT.jar
-          liquibase-cdi/target/liquibase-0-SNAPSHOT.jar
+          liquibase-maven-plugin/target/liquibase-maven-plugin-0-SNAPSHOT.jar
+          liquibase-cdi/target/liquibase-cdi-0-SNAPSHOT.jar
+          liquibase-core/target/liquibase-core-0-SNAPSHOT.jar
           target/liquibase-0-SNAPSHOT-javadoc
 
   integration-test:
