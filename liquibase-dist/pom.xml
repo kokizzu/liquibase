@@ -170,51 +170,6 @@
             </plugin>
 
             <plugin>
-                <artifactId>jdeb</artifactId>
-                <groupId>org.vafer</groupId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jdeb</goal>
-                        </goals>
-                        <configuration>
-                            <deb>${project.build.directory}/liquibase-0-SNAPSHOT.deb</deb>
-                            <attach>false</attach>
-                            <dataSet>
-                                <data>
-                                    <src>${project.build.directory}/liquibase-0-SNAPSHOT</src>
-                                    <type>directory</type>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <prefix>/usr/lib/liquibase</prefix>
-                                    </mapper>
-                                </data>
-                                <data>
-                                    <type>link</type>
-                                    <linkName>/usr/bin/liquibase</linkName>
-                                    <linkTarget>/usr/lib/liquibase/liquibase</linkTarget>
-                                    <symlink>true</symlink>
-                                </data>
-                                <data>
-                                    <src>
-                                        ${project.basedir}/../liquibase-dist/target/archive/lib/liquibase_autocomplete.sh
-                                    </src>
-                                    <type>file</type>
-                                    <mapper>
-                                        <type>perm</type>
-                                        <filemode>644</filemode>
-                                        <prefix>/etc/bash_completion.d/</prefix>
-                                    </mapper>
-                                </data>
-                            </dataSet>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-install-plugin</artifactId>
                 <configuration>
                     <artifactId>liquibase-core</artifactId>
@@ -268,69 +223,8 @@
             </dependencies>
         </profile>
 
-
         <profile>
-            <!-- rpm packager dependency. WARNING, rpmbuild required to build -->
-            <id>build-rpm</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>rpm-maven-plugin</artifactId>
-                        <version>2.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>generate-rpm</id>
-                                <goals>
-                                    <goal>rpm</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <name>liquibase</name>
-                            <license>Apache License, Version 2.0</license>
-                            <sourceEncoding>UTF-8</sourceEncoding>
-                            <distribution>N/A</distribution>
-                            <group>Applications/Databases</group>
-                            <icon>src/main/icons/icon.xpm</icon>
-                            <packager>Liquibase</packager>
-                            <prefix>/usr/local</prefix>
-                            <changelogFile>${project.basedir}../changelog.txt</changelogFile>
-
-                            <mappings>
-
-                                <mapping>
-                                    <directory>/opt/liquibase</directory>
-                                    <sources>
-                                        <source>
-                                            <location>${project.build.directory}/liquibase-0-SNAPSHOT
-                                            </location>
-                                        </source>
-                                    </sources>
-                                </mapping>
-
-                                <!-- Add symbolic link -->
-                                <mapping>
-                                    <directory>/usr/bin</directory>
-                                    <sources>
-                                        <softlinkSource>
-                                            <location>/opt/liquibase/liquibase</location>
-                                        </softlinkSource>
-                                    </sources>
-                                </mapping>
-                            </mappings>
-
-                            <preinstallScriptlet>
-                                <script>echo "Installing liquibase ..."</script>
-                            </preinstallScriptlet>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <!-- install4j packager dependency. WARNING, rpmbuild required to build -->
+            <!-- install4j packager dependency -->
             <id>install4j</id>
             <build>
                 <plugins>
