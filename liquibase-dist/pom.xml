@@ -25,12 +25,12 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>liquibase-cli</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
@@ -64,7 +64,7 @@
     </dependencies>
 
     <build>
-        <finalName>liquibase-0-SNAPSHOT</finalName>
+        <finalName>liquibase-${project.version}</finalName>
         <resources>
             <resource>
                 <directory>${project.basedir}/src/main/archive</directory>
@@ -72,8 +72,8 @@
                 <filtering>true</filtering>
             </resource>
         </resources>
-        <plugins>
 
+        <plugins>
             <plugin>
                 <groupId>io.snyk</groupId>
                 <artifactId>snyk-maven-plugin</artifactId>
@@ -146,7 +146,7 @@
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
-                    <finalName>liquibase-0-SNAPSHOT</finalName>
+                    <finalName>liquibase-${project.version}</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                     <attach>false</attach>
                     <descriptors>
@@ -169,13 +169,37 @@
                 </executions>
             </plugin>
 
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>build-helper-maven-plugin</artifactId>-->
+<!--                <version>3.2.0</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>attach-artifacts</id>-->
+<!--                        <phase>package</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>attach-artifact</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <artifacts>-->
+<!--                                <artifact>-->
+<!--                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-bin.tar.gz</file>-->
+<!--                                    <type>tar.gz</type>-->
+<!--                                    <classifier>bin</classifier>-->
+<!--                                </artifact>-->
+<!--                            </artifacts>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
+
             <plugin>
                 <artifactId>maven-install-plugin</artifactId>
                 <configuration>
                     <artifactId>liquibase-core</artifactId>
-                    <file>${project.build.directory}/liquibase-${version}.jar</file>
-                    <sources>${project.basedir}/../target/liquibase-${version}-sources.jar</sources>
-                    <javadoc>${project.basedir}/../target/liquibase-${version}-javadoc.jar</javadoc>
+                    <file>${project.build.directory}/liquibase-${project.version}.jar</file>
+                    <sources>${project.basedir}/../target/liquibase-${project.version}-sources.jar</sources>
+                    <javadoc>${project.basedir}/../target/liquibase-${project.version}-javadoc.jar</javadoc>
                     <pomFile>${project.build.directory}/release.pom.xml</pomFile>
                 </configuration>
                 <executions>
@@ -212,13 +236,19 @@
 
     <profiles>
         <profile>
-            <id>liquibase-pro-shade</id>
+            <id>liquibase-pro</id>
+
+            <activation>
+                <file>
+                    <exists>../../liquibase-pro/pom.xml</exists>
+                </file>
+            </activation>
 
             <dependencies>
                 <dependency>
                     <groupId>org.liquibase</groupId>
                     <artifactId>liquibase-pro</artifactId>
-                    <version>0-SNAPSHOT</version>
+                    <version>${project.version}</version>
                 </dependency>
             </dependencies>
         </profile>
@@ -280,7 +310,7 @@
                                     <projectFile>${project.basedir}/src/main/install4j/liquibase.install4j</projectFile>
                                     <destination>${project.build.directory}</destination>
                                     <variables>
-                                        <liquibaseVersion>0-SNAPSHOT</liquibaseVersion>
+                                        <liquibaseVersion>${project.version}</liquibaseVersion>
                                     </variables>
                                 </configuration>
                             </execution>
@@ -315,11 +345,11 @@
                             <skip>false</skip>
                             <repositoryId>${deploy.repositoryId}</repositoryId>
                             <artifactId>liquibase-core</artifactId>
-                            <version>0-SNAPSHOT</version>
+                            <version>${project.version}</version>
                             <url>${deploy.url}</url>
-                            <file>${project.build.directory}/liquibase-0-SNAPSHOT.jar</file>
+                            <file>${project.build.directory}/liquibase-${project.version}.jar</file>
                             <files>
-                                target/liquibase-0-SNAPSHOT.tar.gz,target/liquibase-0-SNAPSHOT.zip
+                                target/liquibase-${project.version}.tar.gz,target/liquibase-0-SNAPSHOT.zip
                             </files>
                             <types>
                                 tar.gz,zip
@@ -328,8 +358,8 @@
                                 <!-- need empty classifier so deployed zip/tar files do not have appended "-bin" etc. suffixes -->
                                 ,
                             </classifiers>
-                            <sources>${project.basedir}/../target/liquibase-${version}-sources.jar</sources>
-                            <javadoc>${project.basedir}/../target/liquibase-${version}-javadoc.jar</javadoc>
+                            <sources>${project.basedir}/../target/liquibase-${project.version}-sources.jar</sources>
+                            <javadoc>${project.basedir}/../target/liquibase-${project.version}-javadoc.jar</javadoc>
                             <pomFile>${project.build.directory}/release.pom.xml</pomFile>
                         </configuration>
                         <executions>

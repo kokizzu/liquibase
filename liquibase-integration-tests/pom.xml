@@ -14,13 +14,13 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
@@ -28,7 +28,7 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-extension-testing</artifactId>
-            <version>0-SNAPSHOT</version>
+            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
