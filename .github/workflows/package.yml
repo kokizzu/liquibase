@@ -3,29 +3,32 @@
 
 name: Package
 
-on: [ pull_request]
+on:
+  workflow_run:
+    workflows: ["Build and Test"]
+    types:
+      - completed
 
 jobs:
-  package:
-    name: Build Packages
+  on-build-failure:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion != 'success' }}
     steps:
-      - name: Wait for build to finish
-        uses: fountainhead/action-wait-for-check@v1.0.0
-        id: wait-for-build
-        with:
-          token: ${{ secrets.BOT_TOKEN }}
-          checkName: build
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Check build status
-        if: steps.wait-for-build.outputs.conclusion != 'success'
+      - name: Build failed
         uses: actions/github-script@v3
         with:
           script: |
-            core.setFailed('Build failed: ${{ steps.wait-for-build.outputs.conclusion }}')
+            core.setFailed('Build failed: ${{ github.event.workflow_run.conclusion }}')
 
+  package:
+    name: Build Packages
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+
       - name: Cache Local Maven Repository
         uses: actions/cache@v2
         with:
@@ -41,7 +44,7 @@ jobs:
       - name: Restore Built Code Cache
         uses: actions/cache@v2
         with:
-          key: built-code-${{ github.sha }}
+          key: built-code-${{ github.event.workflow_run.head_sha }}
           path: ./**/target
       - name: Install pre-built modules
         run: mvn -B -pl "!liquibase-dist" jar:jar install:install
