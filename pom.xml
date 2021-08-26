@@ -324,10 +324,19 @@
                 </executions>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-source-plugin</artifactId>-->
-<!--                <version>3.0.1</version>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
 <!--                <executions>-->
 <!--                    <execution>-->
 <!--                        <id>root-source-aggregate</id>-->
@@ -347,31 +356,32 @@
 <!--                        <exclude>*.ks</exclude>-->
 <!--                    </excludes>-->
 <!--                </configuration>-->
-<!--            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.3.0</version>
                 <configuration>
                     <author>false</author>
                     <includeDependencySources>false</includeDependencySources>
-                    <doctitle>Liquibase ${project.version} API</doctitle>
-                    <dependencySourceIncludes>
-                        <dependencySourceInclude>org.liquibase:*</dependencySourceInclude>
-                    </dependencySourceIncludes>
-                    <excludePackageNames>org.liquibase.*,com.datical.*</excludePackageNames>
-                    <quiet>true</quiet>
-                    <doclint>none</doclint>
-                    <encoding>UTF-8</encoding>
-                    <finalName>liquibase-${project.version}</finalName>
-                    <jarOutputDirectory>${project.build.directory}</jarOutputDirectory>
+<!--                    <doctitle>Liquibase ${project.version} API</doctitle>-->
+<!--                    <dependencySourceIncludes>-->
+<!--                        <dependencySourceInclude>org.liquibase:*</dependencySourceInclude>-->
+<!--                    </dependencySourceIncludes>-->
+<!--                    <excludePackageNames>org.liquibase.*,com.datical.*</excludePackageNames>-->
+<!--                    <quiet>true</quiet>-->
+<!--                    <doclint>none</doclint>-->
+<!--                    <encoding>UTF-8</encoding>-->
+<!--                    <finalName>liquibase-${project.version}</finalName>-->
+<!--                    <jarOutputDirectory>${project.build.directory}</jarOutputDirectory>-->
                 </configuration>
                 <executions>
                     <execution>
                         <id>javadoc-aggregate</id>
                         <goals>
-                            <goal>aggregate-jar</goal>
+<!--                            <goal>aggregate-jar</goal>-->
+                            <goal>jar</goal>
                         </goals>
                         <phase>package</phase>
                     </execution>

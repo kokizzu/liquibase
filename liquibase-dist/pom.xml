@@ -193,25 +193,25 @@
 <!--                </executions>-->
 <!--            </plugin>-->
 
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <configuration>
-                    <artifactId>liquibase-core</artifactId>
-                    <file>${project.build.directory}/liquibase-${project.version}.jar</file>
-                    <sources>${project.basedir}/../target/liquibase-${project.version}-sources.jar</sources>
-                    <javadoc>${project.basedir}/../target/liquibase-${project.version}-javadoc.jar</javadoc>
-                    <pomFile>${project.build.directory}/release.pom.xml</pomFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>custom-install</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>install-file</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <artifactId>maven-install-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <artifactId>liquibase-core</artifactId>-->
+<!--                    <file>${project.build.directory}/liquibase-${project.version}.jar</file>-->
+<!--                    <sources>${project.basedir}/../target/liquibase-${project.version}-sources.jar</sources>-->
+<!--                    <javadoc>${project.basedir}/../target/liquibase-${project.version}-javadoc.jar</javadoc>-->
+<!--                    <pomFile>${project.build.directory}/release.pom.xml</pomFile>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>custom-install</id>-->
+<!--                        <phase>install</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>install-file</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
