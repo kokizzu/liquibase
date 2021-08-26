@@ -119,8 +119,10 @@ jobs:
         with:
           key: built-code-${{ github.sha }}
           path: ./**/target
+      - name: Install pre-built modules
+        run: mvn -B -pl "!liquibase-dist" jar:jar install:install
       - name: Build Final Jar & Tar/Zips
-        run: mvn -B -pl liquibase-dist jar:jar jar:test-jar package
+        run: mvn -B -pl liquibase-dist package
 
       - name: Archive Packages
         uses: actions/upload-artifact@v2
