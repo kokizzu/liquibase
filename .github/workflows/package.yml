@@ -6,6 +6,7 @@ name: Package
 on:
   workflow_run:
     workflows: ["Build and Test"]
+    branches: [unversioned-master]
     types:
       - completed
 
@@ -14,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion != 'success' }}
     steps:
+      - uses: haya14busa/action-workflow_run-status@v1
       - name: Build failed
         uses: actions/github-script@v3
         with:
@@ -25,6 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
+      - uses: haya14busa/action-workflow_run-status@v1
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
