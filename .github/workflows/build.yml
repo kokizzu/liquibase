@@ -28,17 +28,15 @@ jobs:
       if: ${{ matrix.java == 8}}
       uses: actions/cache@v2
       with:
-        key: built-code-${{ github.sha }}
+        key: built-code-${{ github.event.pull_request.head.sha }}
         path: ./**/target
-        restore-keys: |
-          built-code-${{ github.event.pull_request.head.sha }}
     - name: Set up JDK ${{ matrix.java }}
       uses: actions/setup-java@v2
       with:
         java-version: ${{ matrix.java }}
         distribution: 'adopt'
     - name: Build & Test
-      run: mvn -B -Dbuild.number=${{ github.run_number }} -Dbuild.commit=${{ github.sha }} -pl '!liquibase-dist' clean test package
+      run: mvn -B -Dbuild.number=${{ github.run_number }} -Dbuild.commit=${{ github.event.pull_request.head.sha }} -pl '!liquibase-dist' clean test package
     - name: Archive Test Results
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
@@ -76,7 +74,7 @@ jobs:
       - name: Restore Built Code Cache
         uses: actions/cache@v2
         with:
-          key: built-code-${{ github.sha }}
+          key: built-code-${{ github.event.pull_request.head.sha }}
           path: ./**/target
 
       - name: Login to Artifactory
