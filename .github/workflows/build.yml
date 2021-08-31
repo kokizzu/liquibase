@@ -30,6 +30,8 @@ jobs:
       with:
         key: built-code-${{ github.sha }}
         path: ./**/target
+        restore-keys: |
+          built-code-${{ github.event.pull_request.head.sha }}
     - name: Set up JDK ${{ matrix.java }}
       uses: actions/setup-java@v2
       with:
