@@ -237,11 +237,9 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <Main-Class>liquibase.integration.commandline.Main</Main-Class>
+                            <addClasspath>false</addClasspath>
                         </manifest>
                         <manifestEntries>
-                            <Liquibase-Package>liquibase.change,liquibase.command,liquibase.changelog,liquibase.database,liquibase.parser,liquibase.precondition,liquibase.datatype,liquibase.serializer,liquibase.sqlgenerator,liquibase.executor,liquibase.snapshot,liquibase.logging,liquibase.diff,liquibase.structure,liquibase.structurecompare,liquibase.lockservice,liquibase.sdk.database,liquibase.ext,liquibase.pro,com.datical.liquibase</Liquibase-Package>
                             <Build-Time>${build.timestamp}</Build-Time>
                             <Build-Number>${build.number}</Build-Number>
                             <Liquibase-Version>${project.version}</Liquibase-Version>
