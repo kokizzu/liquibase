@@ -18,21 +18,20 @@ jobs:
     name: Build Packages
     runs-on: ubuntu-latest
     steps:
-      - name: Create Check
+      - name: Mark Status As Pending
         id: create-check
         uses: actions/github-script@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const check = await github.checks.create({
+            await repos.createCommitStatus({
               "owner": "liquibase",
               "repo": "liquibase",
-              "name": "Build Packages",
-              "head_sha": "${{ github.sha }}",
-              "status": "in_progress",
-              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
+              "context": "build-artifacts",
+              "description": "Build Artifacts",
+              "sha": "${{ github.sha }}",
+              "status": "pending",
+              "target_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
             });
-            core.setOutput("checkId", check.data.id);
 
       - uses: actions/checkout@v2
 #        with:
@@ -79,17 +78,18 @@ jobs:
             liquibase-maven-plugin/target/liquibase-maven-plugin-0-SNAPSHOT.jar
             liquibase-cdi/target/liquibase-cdi-0-SNAPSHOT.jar
 
-      - name: Complete Check
+      - name: Update Status Check
         uses: actions/github-script@v4
         if: always()
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            github.checks.update({
+            await repos.createCommitStatus({
               "owner": "liquibase",
               "repo": "liquibase",
-              "check_run_id": ${{ steps.create-check.outputs.checkId }},
-              "status": "completed",
-              "conclusion": "${{ job.status }}",
-              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
+              "context": "build-artifacts",
+              "description": "Build Artifacts",
+              "sha": "${{ github.sha }}",
+              "status": "${{ job.status }}",
+              "target_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
             });
