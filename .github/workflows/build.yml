@@ -112,8 +112,4 @@ jobs:
               "repo": extension,
               "workflow_id": "package.yml",
               "ref": "${{ github.event.pull_request.head.ref }}"
-#              "inputs": {
-#                "pullRequestSha": "${{ github.event.pull_request.head.sha }}",
-#                "pullRequestRef": "${{ github.event.pull_request.head.ref }}",
-#              }
             });
