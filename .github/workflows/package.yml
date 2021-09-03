@@ -11,23 +11,26 @@ on:
       - completed
 
 jobs:
-  on-build-failure:
-    runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion != 'success' }}
-    steps:
-      - uses: haya14busa/action-workflow_run-status@v1
-      - name: Build failed
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed('Build failed: ${{ github.event.workflow_run.conclusion }}')
-
   package:
     name: Build Packages
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - uses: haya14busa/action-workflow_run-status@v1
+      - name: Create Check
+        id: create-check
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const check = await github.checks.create({
+              "owner": "liquibase",
+              "repo": "liquibase",
+              "name": "Build Packages",
+              "head_sha": "${{ github.event.workflow_run.head_sha }}",
+              "status": "in_progress",
+              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
+            });
+            core.setOutput("checkId", check.data.id);
+
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
@@ -44,13 +47,21 @@ jobs:
         with:
           java-version: '8'
           distribution: 'adopt'
-      - name: Restore Built Code Cache
-        uses: actions/cache@v2
+
+      - name: Download liquibase modules
+        uses: dawidd6/action-download-artifact@v2
         with:
-          key: built-code-${{ github.event.workflow_run.head_sha }}
-          path: ./**/target
-      - name: Install pre-built modules
-        run: mvn -B -pl "!liquibase-dist" jar:jar install:install
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: ${{ github.event.workflow_run.head_branch }}
+          name: liquibase-modules
+          path: download
+
+      - name: Install Built Modules
+        run: |
+          (cd download && find . -name *-SNAPSHOT.jar -exec mvn -B org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install-file -Dfile={} \;)
+          (cd download && find . -name *-SNAPSHOT-sources.jar -exec mvn -B org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install-file -Dfile={} \;)
+
       - name: Build Final Jar & Tar/Zips
         run: mvn -B -pl liquibase-dist package
 
@@ -64,3 +75,17 @@ jobs:
             liquibase-dist/target/liquibase-0-SNAPSHOT.jar
             liquibase-maven-plugin/target/liquibase-maven-plugin-0-SNAPSHOT.jar
             liquibase-cdi/target/liquibase-cdi-0-SNAPSHOT.jar
+
+      - name: Report Check
+        uses: actions/github-script@v4
+        if: always()
+        with:
+          script: |
+            github.checks.update({
+              "owner": "liquibase",
+              "repo": "liquibase",
+              "check_run_id": ${{ steps.create-check.outputs.checkId }},
+              "status": "completed",
+              "conclusion": "${{ job.status }}",
+              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}",
+            });
