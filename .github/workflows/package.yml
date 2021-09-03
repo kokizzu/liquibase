@@ -22,7 +22,7 @@ jobs:
         id: create-check
         uses: actions/github-script@v4
         with:
-          github-token: ${{ secrets.BOT_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const check = await github.checks.create({
               "owner": "liquibase",
@@ -83,7 +83,7 @@ jobs:
         uses: actions/github-script@v4
         if: always()
         with:
-          github-token: ${{ secrets.BOT_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             github.checks.update({
               "owner": "liquibase",
