@@ -109,7 +109,7 @@ jobs:
           script: |
             github.actions.createWorkflowDispatch({
               "owner": "liquibase",
-              "repo": extension,
+              "repo": "liquibase",
               "workflow_id": "package.yml",
               "ref": "${{ github.event.pull_request.head.ref }}"
             });
