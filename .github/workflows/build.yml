@@ -96,3 +96,24 @@ jobs:
           name: liquibase-test-results-integration
           path: |
               ./**/target/surefire-reports
+
+  trigger-package:
+    name: Trigger Package Workflow
+    runs-on: ubuntu-latest
+    needs: integration-test
+    steps:
+      - name: Trigger Extension Builds
+        uses: actions/github-script@v4
+        with:
+          github-token: ${{ secrets.BOT_TOKEN }}
+          script: |
+            github.actions.createWorkflowDispatch({
+              "owner": "liquibase",
+              "repo": extension,
+              "workflow_id": "package.yml",
+              "ref": "${{ github.event.pull_request.head.ref }}"
+#              "inputs": {
+#                "pullRequestSha": "${{ github.event.pull_request.head.sha }}",
+#                "pullRequestRef": "${{ github.event.pull_request.head.ref }}",
+#              }
+            });

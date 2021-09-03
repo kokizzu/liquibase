@@ -4,37 +4,39 @@
 name: Package
 
 on:
-  workflow_run:
-    workflows: ["Build and Test"]
-    branches: [NONE]
-    types:
-      - completed
+  workflow_dispatch:
+#    inputs:
+#      headSha:
+#        description: 'Head SHA'
+#        required: true
+#      headRef:
+#        description: 'Head Ref'
+#        required: true
 
 jobs:
   package:
     name: Build Packages
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
-      - name: Create Check
-        id: create-check
-        uses: actions/github-script@v4
-        with:
-          github-token: ${{ secrets.BOT_TOKEN }}
-          script: |
-            const check = await github.checks.create({
-              "owner": "liquibase",
-              "repo": "liquibase",
-              "name": "Build Packages",
-              "head_sha": "${{ github.event.workflow_run.head_sha }}",
-              "status": "in_progress",
-              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
-            });
-            core.setOutput("checkId", check.data.id);
+#      - name: Create Check
+#        id: create-check
+#        uses: actions/github-script@v4
+#        with:
+#          github-token: ${{ secrets.BOT_TOKEN }}
+#          script: |
+#            const check = await github.checks.create({
+#              "owner": "liquibase",
+#              "repo": "liquibase",
+#              "name": "Build Packages",
+#              "head_sha": "${{ github.sha }}",
+#              "status": "in_progress",
+#              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
+#            });
+#            core.setOutput("checkId", check.data.id);
 
       - uses: actions/checkout@v2
-        with:
-          ref: ${{ github.event.workflow_run.head_branch }}
+#        with:
+#          ref: ${{ context.payload.inputs.headSha }}
 
       - name: Cache Local Maven Repository
         uses: actions/cache@v2
@@ -54,7 +56,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: ${{ github.event.workflow_run.head_branch }}
+#          branch: ${{ github.event.workflow_run.head_branch }}
           name: liquibase-modules
           path: download
 
@@ -77,17 +79,17 @@ jobs:
             liquibase-maven-plugin/target/liquibase-maven-plugin-0-SNAPSHOT.jar
             liquibase-cdi/target/liquibase-cdi-0-SNAPSHOT.jar
 
-      - name: Report Check
-        uses: actions/github-script@v4
-        if: always()
-        with:
-          github-token: ${{ secrets.BOT_TOKEN }}
-          script: |
-            github.checks.update({
-              "owner": "liquibase",
-              "repo": "liquibase",
-              "check_run_id": ${{ steps.create-check.outputs.checkId }},
-              "status": "completed",
-              "conclusion": "${{ job.status }}",
-              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
-            });
+#      - name: Report Check
+#        uses: actions/github-script@v4
+#        if: always()
+#        with:
+#          github-token: ${{ secrets.BOT_TOKEN }}
+#          script: |
+#            github.checks.update({
+#              "owner": "liquibase",
+#              "repo": "liquibase",
+#              "check_run_id": ${{ steps.create-check.outputs.checkId }},
+#              "status": "completed",
+#              "conclusion": "${{ job.status }}",
+#              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
+#            });
