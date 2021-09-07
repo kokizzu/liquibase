@@ -106,6 +106,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Find corresponding branches
+        id: create-check
+        uses: actions/github-script@v4
+        with:
+          script: |
+            let branch = await github.repos.getBranch({
+              "owner": "datical",
+              "repo": "liquibase-pro",
+              "branch": "unversioned-master",
+            });
+            console.log(branch);
+
       - name: Local Maven Repository Cache
         uses: actions/cache@v2
         with:
@@ -143,3 +155,18 @@ jobs:
             liquibase-dist/target/liquibase-0-SNAPSHOT.jar
             liquibase-maven-plugin/target/liquibase-maven-plugin-0-SNAPSHOT.jar
             liquibase-cdi/target/liquibase-cdi-0-SNAPSHOT.jar
+
+#      - name: Create Check
+#        id: create-check
+#        uses: actions/github-script@v4
+#        if: always()
+#        with:
+#          script: |
+#            await github.checks.create({
+#              "owner": "datical",
+#              "repo": "liquibase-pro",
+#              "name": "Liquibase Core Build",
+#              "head_sha": "${{ github.sha }}",
+#              "status": "${{ job.status }}",
+#              "details_url": "https://github.com/liquibase/liquibase/actions/runs/${{ github.run_id }}"
+#            });
