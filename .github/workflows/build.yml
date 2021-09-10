@@ -107,17 +107,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Find corresponding branches
-        id: create-check
-        uses: actions/github-script@v4
-        with:
-          script: |
-            let branch = await github.repos.getBranch({
-              "owner": "datical",
-              "repo": "liquibase-pro",
-              "branch": "unversioned-master",
-            });
-            console.log(branch);
+#      - name: Find corresponding branches
+#        id: create-check
+#        uses: actions/github-script@v4
+#        with:
+#          script: |
+#            let branch = await github.repos.getBranch({
+#              "owner": "datical",
+#              "repo": "liquibase-pro",
+#              "branch": "unversioned-master",
+#            });
+#            console.log(branch);
 
       - name: Local Maven Repository Cache
         uses: actions/cache@v2
