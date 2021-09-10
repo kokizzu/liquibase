@@ -3,7 +3,8 @@
 
 name: Build and Test
 
-on: [ pull_request_target ]
+## Temporarily moved to pull_request so branch builds from this
+on: [ pull_request ]
 
 jobs:
   build:
