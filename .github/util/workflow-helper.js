@@ -26,8 +26,6 @@ module.exports = ({github, context}) => {
                         "branch": branchName,
                     });
 
-                    console.log(branch);
-
                     let returnData = {
                         "name": branchName,
                         "sha": branch.data.commit.sha,
