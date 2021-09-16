@@ -144,7 +144,7 @@ jobs:
 #          (find . -name *-SNAPSHOT-sources.jar -exec mvn -B org.apache.maven.plugins:maven-install-plugin:3.0.0-M1:install-file -Dfile={} \;)
 
       - name: Build Final Jar & Tar/Zips
-        run: mvn -B -pl liquibase-dist package
+        run: mvn -B -pl liquibase-dist -P liquibase-pro package
 
       - name: Archive Packages
         uses: actions/upload-artifact@v2
