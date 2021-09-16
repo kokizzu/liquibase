@@ -144,6 +144,7 @@ jobs:
       - name: Download liquibase-pro
         uses: dawidd6/action-download-artifact@v2
         with:
+          github_token: ${{ secrets.BOT_TOKEN }}
           workflow: build.yml
           workflow_conclusion: success
           branch: "${{ steps.find-branches.outputs.proBranchName }}"
