@@ -10,7 +10,17 @@ public class LiquibaseUtil {
 
     private static Properties liquibaseBuildProperties;
 
+    /**
+     * Return the configured build.version. Will always be "DEV" for non-release builds.
+     */
     public static String getBuildVersion() {
+        return getBuildInfo("build.version");
+    }
+
+    /**
+     * Return the build version for release builds and a more descriptive string for snapshot builds.
+     */
+    public static String getBuildVersionInfo() {
         String version = getBuildInfo("build.version");
         if (version.equals("DEV")) {
             final String buildCommit = getBuildInfo("build.commit");

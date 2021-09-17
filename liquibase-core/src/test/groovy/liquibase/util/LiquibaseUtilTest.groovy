@@ -11,7 +11,7 @@ class LiquibaseUtilTest extends Specification {
     }
 
     @Unroll
-    def getBuildVersion() {
+    def getBuildVersionInfo() {
         when:
         LiquibaseUtil.liquibaseBuildProperties = new Properties()
         LiquibaseUtil.liquibaseBuildProperties.put("build.version", version)
@@ -29,7 +29,8 @@ class LiquibaseUtilTest extends Specification {
         }
 
         then:
-        LiquibaseUtil.getBuildVersion() == expected
+        LiquibaseUtil.getBuildVersionInfo() == expected
+        LiquibaseUtil.getBuildVersion() == version
 
         where:
         version | localBuild | proData | expected
