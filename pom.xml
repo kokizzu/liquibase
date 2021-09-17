@@ -58,6 +58,7 @@
         <build.timestamp>${maven.build.timestamp}</build.timestamp>
         <build.number>0</build.number>
         <build.commit>unknown</build.commit>
+        <build.branch>unknown</build.branch>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spring.version>5.0.12.RELEASE</spring.version>

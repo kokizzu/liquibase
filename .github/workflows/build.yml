@@ -37,7 +37,7 @@ jobs:
         java-version: ${{ matrix.java }}
         distribution: 'adopt'
     - name: Build & Test
-      run: mvn -B -Dbuild.number=${{ github.run_number }} -Dbuild.commit=${{ github.sha }} -pl '!liquibase-dist' clean test package
+      run: mvn -B -Dbuild.branch=${{ github.event.pull_request.head.ref }} -Dbuild.number=${{ github.run_number }} -Dbuild.commit=${{ github.sha }} -pl '!liquibase-dist' clean test package
     - name: Archive Test Results
       if: ${{ always() }}
       uses: actions/upload-artifact@v2

@@ -11,7 +11,23 @@ public class LiquibaseUtil {
     private static Properties liquibaseBuildProperties;
 
     public static String getBuildVersion() {
-        return getBuildInfo("build.version");
+        String version = getBuildInfo("build.version");
+        if (version.equals("DEV")) {
+            final String buildCommit = getBuildInfo("build.commit");
+            if (buildCommit.equals("unknown")) {
+                version = "[local build]";
+            } else {
+                version = "[Core: " + getBuildInfo("build.branch") + "/" + getBuildInfo("build.number") + "/" + buildCommit.substring(0, 6) + "/" + getBuildInfo("build.timestamp");
+
+                if (getBuildInfo("build.pro.number") != null) {
+                    version +=", Pro: " + getBuildInfo("build.pro.branch") + "/" + getBuildInfo("build.pro.number") + "/" + getBuildInfo("build.pro.commit").substring(0, 6) + "/" + getBuildInfo("build.pro.timestamp");
+                }
+
+                version += "]";
+            }
+        }
+
+        return version;
     }
 
     public static String getBuildTime() {
